@@ -46,7 +46,7 @@
         <%= user.name%>
       </td>
       <td>
-        <%= Transaction.where({"to_user_id" => user.id}).sum("amount") - Transaction.where({"from_user_id" => user.id}).sum("amount") %>
+        <%= Transaction.where({"to_user_id" => user.id}).sum("amount") - Transaction.where({"from_user_id" => user.id}).sum("amount") %> KC
       </td>
     </tr>
   <%end%>
