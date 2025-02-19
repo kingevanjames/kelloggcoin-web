@@ -1,5 +1,58 @@
 <h1>KelloggCoin Ledger</h1>
 
+<!-- CHALLENGE TABLES CODE-->
+
+<h1>Transactions</h1>
+<% transactions = Transaction.all%>
+<% users = User.all%>
+
+<table>
+  <tr>
+    <th>Amount</th>
+    <th>Sender</th>
+    <th>Recipient</th>
+  <tr>
+  <%for t in transactions%>
+    <tr>
+      <td>
+        <%= t.amount%> KC 
+      </td>
+      <td>
+        <%to = User.find_by({"id" => t.to_user_id}) %>
+        <%if t.from_user_id %>
+          <%from = User.find_by({"id" => t.from_user_id}) %>
+          <%= from.name %> 
+        <%else %>
+          Initial coin offering
+        <%end%>
+      </td>
+      <td>
+        <%= to.name%>
+      </td>
+    </tr>
+  <%end%>
+</table>
+
+<h1>Balances</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Balance</th>
+  </tr>
+  <% for user in users%>
+    <tr>
+      <td>
+        <%= user.name%>
+      </td>
+      <td>
+        <%= Transaction.where({"to_user_id" => user.id}).sum("amount") - Transaction.where({"from_user_id" => user.id}).sum("amount") %>
+      </td>
+    </tr>
+  <%end%>
+<table>
+
+
 <!-- Step 1: List all transactions, starting with the ICO -->
 
 <h1>Transactions</h1>
@@ -12,7 +65,7 @@
       <%if t.from_user_id %>
         <%from = User.find_by({"id" => t.from_user_id}) %>
         
-        <%= t.amount%> KC from <%= to.name %> to <%= from.name%>
+        <%= t.amount%> KC from <%= from.name %> to <%= to.name%>
       <%else %>
         Initial coin offering: <%= t.amount%> to <%= to.name%>
       <%end%>
